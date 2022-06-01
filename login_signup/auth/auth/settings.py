@@ -127,6 +127,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+MEDIA_ROOT= BASE_DIR / 'media' 
+
 # EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 # EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
@@ -139,5 +141,6 @@ EMAIL_HOST_PASSWORD = 'shazilshah110'
 EMAIL_USE_TLS = True
 
 #for authentications
+
 
 AUTH_USER_MODEL = "login.User"

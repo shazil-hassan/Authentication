@@ -11,10 +11,13 @@ urlpatterns = [
     path("update", views.updateUser, name="update"),
     path("changepass", views.changepassword, name="changepass"),
     path("forgotPassword", views.forgotPass, name="forgotPassword"),
+    path('admin_edit', views.admin_edit, name='admin_edit'),
+    # path('delete_user', views.Delete_user, name='delete_user'),
+  
     path('activate/<uidb64>/<token>/',views.Activate, name='activate'),  
     path('ResetPassword/<uidb64>/<token>/', views.ResetPassword, name="ResetPassword"),
     path("ResetConfirm/<email>", views.ResetConfirm, name="ResetConfirm"),
-  
+
 
 
 ]

@@ -1,10 +1,13 @@
 # from binascii import rledecode_hqx
 # from datetime import date
 # from traceback import format_exc
+from ast import Not
+from asyncio.windows_events import NULL
 import email
 from email import message
 
 from sre_constants import SUCCESS
+from urllib import response
 from django import views
 from django.http import HttpResponse
 
@@ -22,7 +25,7 @@ from .tokens import account_activation_token
 # from django.contrib.auth.tokens import PasswordResetTokenGenerator  
 
 from django.shortcuts import render ,HttpResponse,redirect,HttpResponseRedirect
-from .forms import UserForm,UpdateUserForm,ChangeUserPassword,ResetPass
+from .forms import UserForm,UpdateUserForm,ChangeUserPassword,ResetPass,Admin_editUser
 from django.conf import settings
 from django.core.mail import send_mail,EmailMultiAlternatives
 from django.contrib.auth import login,logout,authenticate,update_session_auth_hash
@@ -32,16 +35,23 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 def index( request):
-  
-    return render(request,'index.html')
+    if User.is_authenticated:
+        if request.user.is_superuser== True:
+            user=User.objects.all()
+            return render(request,'admin_base.html',{'user':user})
+        else:
+            return render(request,'index.html')
+
+
 
 def signup(request):
 
     if request.method == "POST":
-        form = UserForm(request.POST)
+        form = UserForm(request.POST,request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
+            user.role=2
             user.save()
             current_site = get_current_site(request)
             subject = 'Activate your account'
@@ -85,6 +95,7 @@ def Activate(request,uidb64, token):
 def log_in(request):
     
     if request.method == "POST":
+     
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -104,7 +115,7 @@ def log_in(request):
 def updateUser(request):
     if request.user.is_authenticated:
         if request.method == "POST":
-            fm=UpdateUserForm(request.POST,instance=request.user)
+            fm=UpdateUserForm(request.POST,request.FILES,instance=request.user)
             if fm.is_valid():
                 messages.success(request, "Updateed successfully.")
                 fm.save()
@@ -194,5 +205,23 @@ def sent_email(subject,html_content,to_email):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+@csrf_exempt
+def admin_edit(request):
+    if request.method=="POST":
+        id=request.POST.get('id')
 
+        user = User.objects.get(id=id)
+        if user:
+            res = user
+        else:
+            res = "No Data"
+
+    return HttpResponse(res)
+
+# def  Delete_user(request):
+#     if request.method=="POST":  
+#         user_id=request.POST.get('user_id') 
+#         user=request.user
+#         if user is not "":
+#             user.delete()
 
