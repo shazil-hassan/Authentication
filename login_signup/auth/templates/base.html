@@ -50,6 +50,41 @@
 </head>
 
 <body>
+	<div class="modal fade" id="remove_modal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header align-items-center d-flex">
+					<h4 class="modal-title" id="paymentModalLabel">
+						Add New Payment Method
+					</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+				
+	
+						</button>
+				</div>
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div>
+						<!-- Form -->
+						<form method="POST" action="delete_user">
+							<div class="mb-3 col-12 col-md-12 mb-4">
+								{% csrf_token %}
+							
+							  
+								<div class="d-grid mt-3">
+									<input type="hidden" id="user_id">
+									<button type="submit" class="btn btn-primary ">Save</button>
+								</div>
+							</div>
+						</form>
+						<span><strong>Note:</strong> that you can later remove your card at
+								the account setting page.</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-default">
 		<div class="container-fluid px-0">
@@ -275,23 +310,35 @@
 							href="#"
 							role="button"
 							data-bs-toggle="dropdown">
+							
 							<div class="avatar avatar-md avatar-indicators avatar-online">
-								<img class="rounded-circle" src="{% static 'assets/images/avatar/avatar-1.jpg' %}" alt=""/>
+								{%if request.user.user_image %}
+									<img class="rounded-circle" src="{{request.user.user_image}}" alt=""/>
+								{%else%}
+									<img class="rounded-circle" src="{% static '/assets/images/avatar/avatar-4.jpg' %}" alt=""/>
+								{%endif%}
 							</div>
 						</a>
 						<div class="dropdown-menu dropdown-menu-end shadow">
+
 							<div class="dropdown-item">
 								<div class="d-flex">
 									<div class="avatar avatar-md avatar-indicators avatar-online">
-										<img
+										{%if  request.user.user_image  %}
+											<img
+												alt="avatar"
+												src="{{request.user.user_image}}"
+												class="rounded-circle"/>
+										{%else%}
+											<img
 											alt="avatar"
-											src="{% static 'assets/images/avatar/avatar-1.jpg' %}"
-											class="rounded-circle"
-										/>
+											src="{% static '/assets/images/avatar/avatar-4.jpg' %}"
+											class="rounded-circle"/>
+										{%endif%}	
 									</div>
 									<div class="ms-3 lh-1">
-										<h5 class="mb-1">Annette Black</h5>
-										<p class="mb-0 text-muted">annette@geeksui.com</p>
+										<h5 class="mb-1">{{request.user.username.url}}</h5>
+										<p class="mb-0 text-muted">{{request.user.email.url}}</p>
 									</div>
 								</div>
 							</div>
@@ -299,11 +346,11 @@
 							<ul class="list-unstyled">
 								
 
-								<li>
+								{% comment %} <li>
 									<a class="dropdown-item" href="./pages/profile-edit.html">
 										<i class="fe fe-user me-2"></i>Profile
 									</a>
-								</li>
+								</li> {% endcomment %}
 								<li>
 									<a class="dropdown-item" href="changepass">
 										<i class="fe fe-star me-2"></i>Change Password
@@ -311,7 +358,7 @@
 								</li>
 								<li>
 									<a class="dropdown-item" href="update">
-										<i class="fe fe-settings me-2"></i>Update
+										<i class="fe fe-settings me-2"></i>Update Profile
 									</a>
 								</li>
 							</ul>
@@ -623,7 +670,12 @@
 							data-bs-display="static"
 							aria-expanded="false" >
 							<div class="avatar avatar-md avatar-indicators avatar-online">
-								<img class="rounded-circle" src="{% static 'assets/images/avatar/avatar-1.jpg' %}" alt=""/>
+								{%if request.user.user_image%}
+								<img class="rounded-circle" src="{{request.user.user_image}}" alt=""/>
+								{%else%}
+								<img class="rounded-circle" src="{% static '/assets/images/avatar/avatar-4.jpg' %}" alt=""/>
+								{%endif%}
+
 							</div>
 						</a>
 						
@@ -633,11 +685,15 @@
 								
 								<div class="d-flex">
 									<div class="avatar avatar-md avatar-indicators avatar-online">
-										<img class="rounded-circle" src="{% static 'assets/images/avatar/avatar-2.jpg' %}" alt=""/>
+										{%if request.user.user_image %}
+										<img class="rounded-circle" src="{{request.user.user_image}}" alt=""/>
+										{%else%}
+										<img class="rounded-circle" src="{% static '/assets/images/avatar/avatar-4.jpg' %}" alt=""/>
+								  		{%endif%}
 									</div>
 									<div class="ms-3 lh-1">
-										<h5 class="mb-1">Annette Black</h5>
-										<p class="mb-0 text-muted">annette@geeksui.com</p>
+										<h5 class="mb-1">{{request.user.username}}</h5>
+										<p class="mb-0 text-muted">{{request.user.email}}</p>
 									</div>
 								</div>
 								
@@ -645,14 +701,14 @@
 							<div class="dropdown-divider"></div>
 							<ul class="list-unstyled">
 
-								<li>
+								{% comment %} <li>
 									<a
 										class="dropdown-item"
 										href="./pages/profile-edit.html"
 									>
 										<i class="fe fe-user me-2"></i>Profile
 									</a>
-								</li>
+								</li> {% endcomment %}
 								<li>
 									<a class="dropdown-item" href="changepass">
 										<i class="fe fe-star me-2"></i>Change Password
@@ -660,7 +716,7 @@
 								</li>
 								<li>
 									<a class="dropdown-item" href="update">
-										<i class="fe fe-settings me-2"></i>Update
+										<i class="fe fe-settings me-2"></i>Update Profile
 									</a>
 								</li>
 								
@@ -738,11 +794,56 @@
 	<!-- clipboard -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
 	
+
+{% if not message == "" %}
+<script> 
+	function hidemessage(){
+		$('#view_message').hide();
+	};
+	setTimeout( hidemessage,4000);
+
+</script>
+{% endif%}
+
+
+<script>
+	function editfun(val){
+		$.ajax({
+			type:"POST",
+            url: "{% url 'admin_edit' %}",
+			dataType:"json",
+			data:{
+				id:val
+			},
+			success: function (res) {
+				if (res == true) {
+					alert("check failed");
+				}
+				else {
+					alert("mee failed");
+				}
+			},
+			error: function () {
+				alert("Ajax failed");
+			}
+		});
+	}
+</script>
+
+<script>
+	function removefun(val){
+		$('#user_id').val(val);
+		$('#remove_modal').modal('show')
+		
+	}
+</script>
 	
 	<!-- Theme JS -->
 {% include "message.html" %}
 {%block body%}
 {%endblock body%} 
+
+
 
 </body>
 

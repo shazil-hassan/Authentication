@@ -1,0 +1,112 @@
+
+
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+{%block body%}
+<div class="container">
+   <div class="row">
+        <div class="col-md-12 mt-4">
+            <!-- Card -->
+            <div class="card mb-4"style="text-align:center;">
+                <!-- Card header -->
+                <div class="card-header border-bottom-0">
+                    <h3 class="mb-0">Admin Panel</h3>
+                    {% comment %} <span>Order Dashboard is a quick overview of all current
+                        orders.</span> {% endcomment %}
+                </div>
+                <!-- Table -->
+               
+                        <div class="table-responsive border-0"style="text-align:center;">
+                            <table class="table mb-0 text-nowrap" style="text-align:center;">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col" class="border-0">Username</th>
+                                        <th scope="col" class="border-0">Email</th>
+                                        <th scope="col" class="border-0">Status</th>
+                                        <th scope="col" class="border-0">Join Date</th>
+                                        <th scope="col" class="border-0">Role</th>
+                                        <th scope="col" class="border-0"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    {% for items in user %}
+                                    {% if not items.is_superuser %}
+                                    {%if items.is_active == True %}
+                                    <tr>
+                                        <td class="align-middle border-top-0">
+                                            <h5 class="mb-0">
+                                                <a href="#" class="text-inherit">
+                                                    {{items.username}}
+                                                </a>
+                                            </h5>
+                                        </td>
+                                        <td class="align-middle border-top-0">{{items.email}}</td>
+                                        <td class="align-middle border-top-0">{{items.is_active}}</td>
+                                        <td class="align-middle border-top-0">{{items.date_joined}}</td>
+                                        <td class="align-middle border-top-0">{{items.role}}</td>
+                                        <td class="text-muted align-middle border-top-0">
+                                            <span class="dropdown dropstart">
+                                                <a class="text-muted text-decoration-none" href="#" role="button" id="courseDropdown1"
+                                                    data-bs-toggle="dropdown"  data-bs-offset="-20,20" aria-expanded="false">
+                                                    <i class="fe fe-more-vertical"></i>
+                                                </a>
+                                                <span class="dropdown-menu" aria-labelledby="courseDropdown1">
+                                                    <span class="dropdown-header">Setting </span>
+                                                    <a class="dropdown-item" onclick="editfun({{items.id}})"><i class="fe fe-edit dropdown-item-icon"  id="edit_user"></i>Edit</a>
+                                                    <a class="dropdown-item"onclick="removefun({{items.id}})"><i class="fe fe-trash dropdown-item-icon" id="remove_user"></i>Remove</a>
+                                                </span>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {%endif%}
+                                    {%endif%}
+                                    {%endfor%}
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-items-center d-flex">
+                <h4 class="modal-title" id="paymentModalLabel">
+                    Add New Payment Method
+                </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            
+
+					</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div>
+                    <!-- Form -->
+                    <form method="POST">
+                        <div class="mb-3 col-12 col-md-12 mb-4">
+                            {% csrf_token %}
+                            {{ form |crispy }}
+                           
+                            <div class="d-grid mt-3">
+                                <button type="submit" class="btn btn-primary ">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                    <span><strong>Note:</strong> that you can later remove your card at
+							the account setting page.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock body%}

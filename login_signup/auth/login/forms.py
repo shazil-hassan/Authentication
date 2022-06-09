@@ -5,11 +5,11 @@ from django.contrib.auth.forms import UserCreationForm,UserChangeForm,PasswordCh
 from .models import * 
 
 class UserForm(UserCreationForm):
-	
+	# user_image=forms.ImageField(required=False)
 
 	class Meta:
 		model = User
-		fields = ("username", "email", "password1", "password2")
+		fields = ("username", "email",  "password1", "password2","user_image")
 
 	def save(self, commit=True):
 		user = super(UserForm, self).save(commit=False)
@@ -24,7 +24,7 @@ class UpdateUserForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ("username", "email")
+        fields = ("username", "email","user_image")
 
 
 
@@ -44,3 +44,10 @@ class ResetPass(UserCreationForm):
 		model = User
 		fields = ( "password1", "password2")
 
+
+class Admin_editUser(UserChangeForm):
+    password=None
+
+    class Meta:
+        model = User
+        fields = ("username", "email")
